@@ -18,13 +18,23 @@ Leia nesta ordem:
 ## Resumo em uma frase
 
 Web app **multi-empresa** (Next.js + TypeScript + Prisma + PostgreSQL + Tailwind)
-que liga **compra de insumo → custo real → ficha técnica → produção → estoque →
-venda → recibo → margem**, resolvendo as quatro dores centrais: controle de
-estoque, custo atualizado, recibo e divisão de insumos por sabor/tipo.
+que liga **compra/importação de NF → custo real → calda base → ficha técnica por
+sabor → produção (com lote/validade) → estoque → venda (bola, kg, pote, balde...) →
+recibo → margem**, resolvendo as seis dores centrais do cliente.
+
+## Dores cobertas pelo plano
+
+1. Controle de estoque (com **lote e validade**).
+2. Custo atualizado pelas compras — inclui **custo da calda base** + produto acabado.
+3. Emissão de recibo.
+4. Divisão de insumos por sabor/tipo (**ficha técnica multi-nível**).
+5. **Entrada de estoque por nota fiscal** (XML da NF-e + foto/OCR), com mapeamento
+   automático dos produtos.
+6. **Preços praticados e margem** por produto/formato.
 
 ## Estado atual
 
 - ✅ Stack e escopo comercial decididos com o cliente.
 - ✅ Scaffold `create-next-app` criado no repositório.
-- ✅ Planejamento documentado (esta pasta).
+- ✅ Planejamento documentado e revisado com as decisões do cliente (esta pasta).
 - ⏭️ Próximo passo: executar a **Fase 0** do roadmap (doc 03).
