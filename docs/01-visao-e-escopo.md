@@ -105,6 +105,9 @@ Entra no MVP:
       sabores, baixando componentes e gerando estoque com lote/validade e custo do lote.
 - [ ] **Formatos de venda** por produto: bola, casquinha, cascão, pote, picolé,
       balde, **self-service por kg**, com preço de **varejo e atacado**.
+- [ ] **Produtos montados na venda** (sundae, milkshake, açaí com complementos):
+      composição que baixa vários insumos/produtos no momento da venda.
+- [ ] **CMV** e **previsão de ruptura/sugestão de compra** nos relatórios.
 - [ ] **PDV + recibo**: venda em qualquer formato (inclusive por peso), baixa de
       estoque de produto acabado (respeitando lote), geração de recibo imprimível/PDF.
 - [ ] **Relatórios**: estoque + alertas de estoque mínimo e de validade próxima;

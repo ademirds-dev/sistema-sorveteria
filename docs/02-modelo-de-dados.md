@@ -50,6 +50,27 @@ Sorvete de Chocolate (PRODUTO)
 O custo sobe em cascata: calcula-se o custo da calda base a partir dos insumos e,
 em seguida, o custo do sabor a partir da calda + saborizante + embalagem.
 
+### 3.1 Produto estocável × produto montado na venda
+
+Há **duas formas** de um PRODUTO chegar ao cliente — e ambas precisam existir:
+
+- **ESTOCÁVEL** — é **fabricado em lote** (produção), vira estoque de produto
+  acabado e depois é vendido. Ex.: pote 2 L, balde 10 L, picolé, e a própria
+  **massa do sabor** (estocada em kg/L, da qual saem bolas/casquinhas).
+- **MONTADO_NA_VENDA** — é **montado na hora da venda** a partir de vários
+  componentes, sem estoque próprio. Ao vender, **baixa cada componente** do estoque.
+  Ex.: **sundae** = 2 bolas de sorvete (massa do sabor) + calda + granulado + copo +
+  colher; **milkshake** = sorvete + leite + calda + copo; **açaí na tigela** = açaí
+  por peso + complementos + tigela.
+
+Os dois casos **reutilizam o mesmo conceito de ficha técnica** (`Receita` +
+`ComponenteReceita`): no ESTOCÁVEL a receita é consumida na **produção**; no
+MONTADO_NA_VENDA a receita é consumida na **venda**. O custo do item montado é a
+soma dos custos dos componentes no momento da venda (base para o CMV e a margem).
+
+Isso é o que os verticais de sorveteria fazem no balcão (ver doc 04) e faltava no
+nosso modelo, que só previa baixa na produção.
+
 ## 4. Schema Prisma de referência
 
 ```prisma
@@ -59,6 +80,7 @@ em seguida, o custo do sabor a partir da calda + saborizante + embalagem.
 enum Papel        { OWNER GERENTE PRODUCAO CAIXA }
 enum MetodoCusteio { ULTIMA_COMPRA MEDIA_PONDERADA }
 enum TipoItem     { INSUMO INTERMEDIARIO PRODUTO }
+enum FormaProduto { ESTOCAVEL MONTADO_NA_VENDA } // só para PRODUTO
 enum TipoMovimento { ENTRADA SAIDA AJUSTE }
 enum StatusNota   { PENDENTE_MAPEAMENTO CONFIRMADA DESCARTADA }
 enum OrigemNota   { XML FOTO }
@@ -125,6 +147,9 @@ model Item {
   empresa        Empresa  @relation(fields: [empresaId], references: [id])
   nome           String
   tipo           TipoItem
+  // Só para tipo PRODUTO: se é fabricado/estocado ou montado na hora da venda.
+  // ESTOCAVEL usa a receita na PRODUCAO; MONTADO_NA_VENDA usa a receita na VENDA.
+  formaProduto   FormaProduto? @default(ESTOCAVEL)
   // Unidade em que o ESTOQUE é controlado (menor granularidade): G, ML, KG, L, UN.
   unidadeEstoque String
   // Só para INSUMO comprado em outra unidade (ex.: SACO, CX, L):
@@ -463,14 +488,26 @@ Para cada item:
 6. Criar `Lote` do item produzido (código + validade) e dar ENTRADA
    (`origem="PRODUCAO_ENTRADA"`); atualizar `estoqueAtual` e custos do item.
 
-### 6.3 Venda (qualquer formato)
-1. Para cada item: resolver `quantidadeEstoque`:
+### 6.3 Venda — produto ESTOCÁVEL (qualquer formato)
+1. Resolver `quantidadeEstoque`:
    - formato por unidade: `quantidade * formato.quantidadeEstoque`;
    - formato por peso (self-service/kg): `quantidade` já é a qtd em unidadeEstoque.
 2. Validar estoque; baixar por **FEFO** nos lotes; `MovimentoEstoque` SAIDA
    (`origem="VENDA"`), congelando `custoUnitario` do item.
 3. `precoUnitario` conforme `canal` (varejo/atacado) do formato.
 4. Somar `valorTotal`; gerar `Recibo` numerado.
+
+### 6.4 Venda — produto MONTADO_NA_VENDA (sundae, milkshake, açaí…)
+O produto não tem estoque próprio; a `Receita` dele é consumida na venda.
+1. Para cada componente da receita: `consumo = componente.quantidade * quantidadeVendida`.
+2. Validar estoque de cada componente; baixar por **FEFO**; `MovimentoEstoque` SAIDA
+   (`origem="VENDA"`). Componentes podem ser INSUMO (calda, copo, colher) ou outro
+   PRODUTO estocável (a massa do sabor, baixada em kg/L).
+3. `custoUnitario` do item vendido = `Σ consumo * custoUnitario(componente)` — este é
+   o custo que alimenta o CMV e a margem.
+4. `precoUnitario` conforme `canal`; somar `valorTotal`; gerar `Recibo`.
+5. (Backlog) **complementos/regras de seleção**: N complementos inclusos + extras
+   cobrados à parte (ex.: açaí com 3 complementos grátis, adicionais pagos).
 
 ## 7. Importação de NF (fluxo de dados)
 

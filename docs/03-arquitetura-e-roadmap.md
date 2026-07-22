@@ -124,27 +124,39 @@ docs/
 ### Fase 6 — Vendas, formatos e recibo (DOR #3, #6)
 - [ ] Cadastro de **formatos de venda** por produto: bola, casquinha, cascão, pote,
       picolé, balde, **self-service por kg**, com preço **varejo e atacado**.
-- [ ] **PDV**: escolher produto + formato; venda por unidade ou **por peso (kg)**;
-      canal varejo/atacado; forma de pagamento.
+- [ ] **Produtos montados na venda** (`MONTADO_NA_VENDA`): sundae, milkshake, açaí
+      com complementos — definir a composição (reusa ficha técnica) que baixa vários
+      insumos/produtos na venda (doc 02, 6.4).
+- [ ] **PDV**: escolher produto + formato; venda por unidade, **por peso (kg)** ou
+      montado; canal varejo/atacado; forma de pagamento.
 - [ ] Finalizar: baixa de estoque (FEFO) + `Venda`/`ItemVenda` (congela custo) +
-      **recibo numerado por empresa** imprimível/PDF (doc 02, 6.3 e 8).
-- **Entregável:** vender em qualquer formato gera recibo e baixa estoque.
+      **recibo numerado por empresa** imprimível/PDF (doc 02, 6.3/6.4 e 8).
+- [ ] **Ponto de integração de balança** (peso→preço): começar com peso digitado no
+      PDV, deixar a interface pronta para leitura automática depois.
+- **Entregável:** vender em qualquer formato (inclusive montado) gera recibo e baixa estoque.
 
-### Fase 7 — Painel, margem e alertas (DOR #6)
+### Fase 7 — Painel, CMV, margem e alertas (DOR #6)
 - [ ] Dashboard: estoque de insumo/produto; **alertas de estoque mínimo** e de
       **validade próxima**.
+- [ ] **CMV** (Custo da Mercadoria Vendida) por período como métrica de primeira classe.
 - [ ] Relatório **custo x preço praticado x margem** por produto/formato
       (varejo e atacado).
+- [ ] **Previsão de ruptura + sugestão de compra**: a partir do consumo médio,
+      estimar "acaba em X dias" e sugerir reposição (ponto de pedido). Simples, sem IA.
 - [ ] Relatórios de compras e de vendas por período.
-- **Entregável:** o dono enxerga margem e o que precisa comprar/produzir.
+- **Entregável:** o dono enxerga CMV, margem e o que precisa comprar/produzir.
 
 ### Fase 8+ — Futuro (fora do MVP)
-- NFC-e/NF-e de saída; SPED; contador.
-- Hardware: impressora térmica, balança, gaveta, maquininha/TEF.
+- **PDV offline-first (PWA com fila de vendas)** — repriorizado: vender não pode
+  parar por falta de internet (lição GranMoney/Saipos — ver doc 04).
+- NFC-e/NF-e de saída (já nas regras da **Reforma Tributária 2026**); SPED; contador.
+- Hardware: impressora térmica, **balança**, gaveta, maquininha/TEF.
 - Rastreabilidade completa de lote / recall.
 - Financeiro (contas a pagar/receber, fluxo de caixa, DRE).
-- Curva ABC, previsão de demanda/sazonalidade, promoções.
-- Mobile / offline; delivery / cardápio online.
+- **Curva ABC de insumos**; previsão de demanda/sazonalidade; promoções.
+- **Ordem de produção sugerida pela demanda/estoque**.
+- **Pedido loja→fábrica (B2B interno)** para atacado/rede.
+- Mobile; delivery / cardápio digital / iFood.
 - Endurecimento multi-tenant com **RLS no PostgreSQL**.
 
 ## 5. Nota sobre OCR da foto da nota

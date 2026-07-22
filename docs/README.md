@@ -14,6 +14,9 @@ Leia nesta ordem:
    estoque (o núcleo do valor do sistema).
 3. **[03 — Arquitetura e Roadmap de Execução](./03-arquitetura-e-roadmap.md)**
    Stack, estrutura de pastas, convenções obrigatórias e o roadmap por fases.
+4. **[04 — Análise de Concorrência](./04-analise-concorrencia.md)**
+   Mapa do mercado (PDV-verticais × ERPs industriais), crítica de 6 concorrentes,
+   o que adotar e o nosso posicionamento.
 
 ## Resumo em uma frase
 
