@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SysSorv — Sistema para Sorveteria / Fábrica de Sorvete
 
-## Getting Started
+SaaS **multi-empresa** para sorveteria que também é fábrica de sorvete. Liga
+**compra/importação de NF → custo real (calda base + produto) → ficha técnica →
+produção (lote/validade) → estoque → venda (bola, kg, pote, balde, sundae...) →
+recibo → margem**.
 
-First, run the development server:
+> **Status:** etapa de **planejamento**. O código é o scaffold inicial; as
+> funcionalidades serão implementadas seguindo o roadmap em [`docs/`](./docs).
+> Comece por [`docs/README.md`](./docs/README.md).
+
+## Stack
+
+Next.js (App Router) + TypeScript · Prisma + PostgreSQL · Tailwind CSS · Auth.js ·
+Zod. Detalhes em [`docs/03-arquitetura-e-roadmap.md`](./docs/03-arquitetura-e-roadmap.md).
+
+## Rodando localmente
+
+Pré-requisitos: **Node 22+** e **Git**.
 
 ```bash
+# 1. Clonar (de preferência FORA de pasta sincronizada do Google Drive)
+git clone https://github.com/ademirds-dev/sistema-sorveteria.git SysSorv
+cd SysSorv
+git checkout claude/ice-cream-shop-system-e4bd1u
+
+# 2. Instalar dependências
+npm install
+
+# 3. Rodar em desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra <http://localhost:3000>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Scripts disponíveis:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm run start` | Sobe o build de produção |
+| `npm run lint` | ESLint |
 
-## Learn More
+## Variáveis de ambiente
 
-To learn more about Next.js, take a look at the following resources:
+Copie `.env.example` para `.env` e ajuste. O `.env` **não** é versionado.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cp .env.example .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> As variáveis de banco (`DATABASE_URL`) passam a ser usadas a partir da **Fase 0**
+> do roadmap, quando o Prisma/PostgreSQL forem configurados. No scaffold atual ainda
+> não são necessárias para `npm run dev`.
 
-## Deploy on Vercel
+## Documentação de planejamento
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [`docs/01-visao-e-escopo.md`](./docs/01-visao-e-escopo.md) — visão, escopo do MVP, decisões.
+- [`docs/02-modelo-de-dados.md`](./docs/02-modelo-de-dados.md) — modelo multi-tenant e regras de custo/estoque.
+- [`docs/03-arquitetura-e-roadmap.md`](./docs/03-arquitetura-e-roadmap.md) — stack, convenções e roadmap por fases.
+- [`docs/04-analise-concorrencia.md`](./docs/04-analise-concorrencia.md) — análise de mercado e posicionamento.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Convenção do repositório
+
+Veja [`AGENTS.md`](./AGENTS.md): este projeto usa uma versão do Next.js com possíveis
+mudanças de API — consulte os guias em `node_modules/next/dist/docs/` antes de
+escrever código.
+
+## Git
+
+Trabalho na branch `claude/ice-cream-shop-system-e4bd1u`. Fluxo:
+
+```bash
+git pull            # antes de começar
+# ... edições ...
+git add -A && git commit -m "mensagem" && git push
+```
